@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Bug.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bugtrackingsystem</a> &gt; <a href="index.source.html" class="el_package">com.project.bugtrackingsystem.entity</a> &gt; <span class="el_source">Bug.java</span></div><h1>Bug.java</h1><pre class="source lang-java linenums">package com.project.bugtrackingsystem.entity;
+
+import java.io.Serializable;
+
+import java.time.LocalDate;
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.project.bugtrackingsystem.util.BugStatus;
+import com.project.bugtrackingsystem.util.Severity;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+
+
+@SuppressWarnings(&quot;serial&quot;)
+<span class="pc bpc" id="L17" title="84 of 86 branches missed.">@Data</span>
+<span class="fc" id="L18">@NoArgsConstructor</span>
+<span class="nc" id="L19">@AllArgsConstructor</span>
+<span class="nc" id="L20">@ToString</span>
+@Entity
+@Table(name = &quot;bugs&quot;)
+public class Bug implements Serializable {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = &quot;bug_id&quot;)
+<span class="nc" id="L28">	private Integer bugId;</span>
+
+    @Column(name = &quot;bug_title&quot;)
+<span class="nc" id="L31">    private String bugTitle;</span>
+
+    @Column(name = &quot;bug_description&quot;)
+<span class="nc" id="L34">    private String bugDescription;</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;severity&quot;)
+<span class="nc" id="L38">    private Severity severity;</span>
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = &quot;created_by_id&quot;, referencedColumnName = &quot;user_id&quot;)
+<span class="nc" id="L43">    private TestEngineer createdBy;</span>
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = &quot;assign_to_id&quot;, referencedColumnName = &quot;user_id&quot;)
+<span class="nc" id="L48">    private Developer assignTo;</span>
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;status&quot;)
+<span class="nc" id="L52">    private BugStatus status;</span>
+
+    @Column(name = &quot;start_date&quot;)
+<span class="nc" id="L55">    private LocalDate startDate;</span>
+
+    @Column(name = &quot;last_updated_date&quot;)
+<span class="nc" id="L58">    private LocalDate lastUpdatedDate;</span>
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = &quot;proj_id&quot;)
+<span class="nc" id="L63">    private Project project;</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

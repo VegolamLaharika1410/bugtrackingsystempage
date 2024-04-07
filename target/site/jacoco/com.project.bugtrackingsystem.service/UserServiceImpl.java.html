@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bugtrackingsystem</a> &gt; <a href="index.source.html" class="el_package">com.project.bugtrackingsystem.service</a> &gt; <span class="el_source">UserServiceImpl.java</span></div><h1>UserServiceImpl.java</h1><pre class="source lang-java linenums">package com.project.bugtrackingsystem.service;
+
+import com.project.bugtrackingsystem.dto.UserDTO;
+import com.project.bugtrackingsystem.entity.User;
+import com.project.bugtrackingsystem.exception.UserNotAvailableException;
+import com.project.bugtrackingsystem.repository.UserRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+@Service
+<span class="fc" id="L12">public class UserServiceImpl implements UserService {</span>
+
+    @Autowired
+    private UserRepository userRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Override
+    public UserDTO registerUser(UserDTO userDTO) {
+<span class="fc" id="L22">        User user = modelMapper.map(userDTO, User.class);</span>
+<span class="fc" id="L23">        user = userRepository.save(user);</span>
+<span class="fc" id="L24">        System.out.println(user.toString());</span>
+<span class="fc" id="L25">        return modelMapper.map(user, UserDTO.class);</span>
+    }
+
+    @Override
+    public UserDTO signIn(String userName, String password) throws UserNotAvailableException {
+<span class="fc" id="L30">        User userEntity = userRepository.findByUserNameAndUserPassword(userName, password);</span>
+ 
+<span class="pc bpc" id="L32" title="1 of 2 branches missed.">        if (userEntity != null) {</span>
+<span class="fc" id="L33">            return modelMapper.map(userEntity, UserDTO.class);</span>
+        } else {
+<span class="nc" id="L35">            throw new UserNotAvailableException(&quot;User not found or authentication failed for username: &quot; + userName);</span>
+        }
+    }
+
+    @Override
+    public String signOut() {
+        // Implement session management logic, such as invalidating the user's session.
+        // This might involve clearing the session attributes, redirecting the user, etc.
+        // Return a message or status indicating the sign-out action was successful.
+<span class="fc" id="L44">        return &quot;User signed out successfully&quot;;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

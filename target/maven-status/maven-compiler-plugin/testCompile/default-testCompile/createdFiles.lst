@@ -1,0 +1,5 @@
+com\project\bugtrackingsystem\service\BugServiceImplTest.class
+com\project\bugtrackingsystem\service\UserServiceImplTest.class
+com\project\bugtrackingsystem\service\DeveloperServiceImplTest.class
+com\project\bugtrackingsystem\service\ProjectServiceImplTest.class
+com\project\bugtrackingsystem\service\TestEngineerServiceImplTest.class

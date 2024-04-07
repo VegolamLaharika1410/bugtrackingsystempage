@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TestEngineerServiceImpl.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">bugtrackingsystem</a> &gt; <a href="index.source.html" class="el_package">com.project.bugtrackingsystem.service</a> &gt; <span class="el_source">TestEngineerServiceImpl.java</span></div><h1>TestEngineerServiceImpl.java</h1><pre class="source lang-java linenums">package com.project.bugtrackingsystem.service;
+
+import com.project.bugtrackingsystem.dto.BugDTO;
+//import com.project.bugtrackingsystem.dto.ProjectDTO;
+import com.project.bugtrackingsystem.dto.TestEngineerDTO;
+import com.project.bugtrackingsystem.entity.Bug;
+import com.project.bugtrackingsystem.entity.Developer;
+//import com.project.bugtrackingsystem.entity.Project;
+import com.project.bugtrackingsystem.entity.TestEngineer;
+//import com.project.bugtrackingsystem.repository.ProjectRepository;
+import com.project.bugtrackingsystem.repository.TestEngineerRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+@Service
+<span class="fc" id="L22">public class TestEngineerServiceImpl implements TestEngineerService {</span>
+
+    @Autowired
+    private TestEngineerRepository testEngineerRepository;
+
+//    @Autowired
+//    private ProjectRepository projectRepository;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Override
+    public TestEngineerDTO addTestEngineer(TestEngineerDTO testEngineerDTO) {
+<span class="fc" id="L35">        TestEngineer testEngineer = modelMapper.map(testEngineerDTO, TestEngineer.class);</span>
+<span class="fc" id="L36">        testEngineer = testEngineerRepository.save(testEngineer);</span>
+<span class="fc" id="L37">        return modelMapper.map(testEngineer, TestEngineerDTO.class);</span>
+    }
+
+    @Override
+    public TestEngineerDTO updateTestEngineer(TestEngineerDTO testEngineerDTO) {
+<span class="fc" id="L42">        TestEngineer existingTestEngineerEntity = testEngineerRepository.findById(testEngineerDTO.getUserId()).orElse(null);</span>
+
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">        if (existingTestEngineerEntity != null) {</span>
+            // Update the fields as needed
+<span class="nc" id="L46">            existingTestEngineerEntity.setTesterName(testEngineerDTO.getTesterName());</span>
+<span class="nc" id="L47">            existingTestEngineerEntity.setUserEmail(testEngineerDTO.getUserEmail());</span>
+            // Continue updating other fields
+
+<span class="nc" id="L50">            existingTestEngineerEntity = testEngineerRepository.save(existingTestEngineerEntity);</span>
+<span class="nc" id="L51">            return modelMapper.map(existingTestEngineerEntity, TestEngineerDTO.class);</span>
+        } else {
+<span class="fc" id="L53">            return null; // Handle the case where the test engineer is not found</span>
+        }
+    }
+
+    @Override
+    public TestEngineerDTO getTestEngById(Integer testerId) {
+<span class="fc" id="L59">        TestEngineer testEngineerEntity = testEngineerRepository.findById(testerId).orElse(null);</span>
+
+<span class="fc bfc" id="L61" title="All 2 branches covered.">        if (testEngineerEntity != null) {</span>
+<span class="fc" id="L62">            return modelMapper.map(testEngineerEntity, TestEngineerDTO.class);</span>
+        } else {
+<span class="fc" id="L64">            return null; // Handle the case where the test engineer is not found</span>
+        }
+    }
+
+    @Override
+    public Page&lt;TestEngineerDTO&gt; getAllTesters(Pageable pageable) {
+<span class="nc" id="L70">    	Page&lt;TestEngineer&gt; testEngineerEntities = testEngineerRepository.findAll(pageable);</span>
+
+		/*
+		 * return testEngineerEntities.stream() .map(testEngineer -&gt;
+		 * modelMapper.map(testEngineer, TestEngineerDTO.class))
+		 * .collect(Collectors.toList());
+		 */
+    	
+<span class="nc" id="L78">    	Page&lt;TestEngineerDTO&gt; testEngineerDtoPage = testEngineerEntities.map(te -&gt; modelMapper.map(te, TestEngineerDTO.class));</span>
+<span class="nc" id="L79">		return testEngineerDtoPage;</span>
+    }
+
+    @Override
+	public void deleteTestEngineer(Integer testerId) {
+		
+<span class="nc" id="L85">		TestEngineer testEngineerEntity = modelMapper.map(testerId, TestEngineer.class);</span>
+		
+<span class="nc" id="L87">		testEngineerRepository.deleteById(testerId);</span>
+<span class="nc" id="L88">	}</span>
+    
+//    @Override
+//    public List&lt;ProjectDTO&gt; getProjectsByTestEngId(Integer testEngId) {
+//        TestEngineer testEngineerEntity = testEngineerRepository.findById(testEngId).orElse(null);
+//
+//        if (testEngineerEntity != null) {
+//            List&lt;Project&gt; projectsForTestEngineer = testEngineerRepository.findByTestEngineer(testEngineerEntity);
+//
+//            return projectsForTestEngineer.stream()
+//                    .map(project -&gt; modelMapper.map(project, ProjectDTO.class))
+//                    .collect(Collectors.toList());
+//        } else {
+//            return null; // Handle the case where the test engineer is not found
+//        }
+//    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
